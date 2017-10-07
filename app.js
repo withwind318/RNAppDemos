@@ -10,12 +10,13 @@ import {
   StyleSheet,
   Text,
   View,
-  Button
+  TouchableOpacity,
 } from 'react-native';
 
 import { StackNavigator } from 'react-navigation';
 
 import AsyncStorageScene from './scene/AsyncStorageScene';
+import TouchableScene from './scene/TouchableScene';
 
 class HomeScreen extends Component {
   static navigationOptions = {
@@ -27,11 +28,25 @@ class HomeScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <Button
-        onPress={() => navigate('AsyncStorage') }
-        title="AsyncStorageDemo"
-        color="#841584"
-      />
+
+        <TouchableOpacity
+          onPress={() => navigate('AsyncStorage')}
+          activeOpacity={0.7}
+          >
+          <View style={styles.btn}>
+            <Text style={styles.text} >AsyncStorageDemo</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => navigate('Touchable')}
+          activeOpacity={0.7}
+          >
+          <View style={styles.btn}>
+            <Text style={styles.text} >TouchableDemo</Text>
+          </View>
+        </TouchableOpacity>
+
       </View>
     );
   }
@@ -40,14 +55,37 @@ class HomeScreen extends Component {
 export default RNAppDemos = StackNavigator({
   Home: { screen: HomeScreen },
   AsyncStorage: { screen: AsyncStorageScene },
+  Touchable: { screen: TouchableScene },
 });
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'column',
     flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    backgroundColor: '#F5FCFF',
+  },
+
+  row: {
+    flexDirection: 'row',
+    flex: 1,
+  },
+
+  text: {
+    fontSize: 16,
+    marginLeft: 10,
+    color: '#434343'
+  },
+
+  btn: {
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 10,
+    height: 45,
+    backgroundColor: '#18B4FF',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
   },
 });
 

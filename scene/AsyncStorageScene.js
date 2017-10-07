@@ -6,33 +6,16 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
   Button,
   AsyncStorage,
-  TouchableHighlight,
+  TextInput,
+  TouchableOpacity,
 } from 'react-native';
 
 import { StackNavigator } from 'react-navigation';
-
-var STORAGE_KEY_ONE = '@AsyncStorageDemo:key_one';
-var STORAGE_KEY_MESSAGE = '@AsyncStorageDemo:key_message';
-
-//简单封装一个组件
-class CustomButton extends React.Component {
-  render() {
-    return (
-      <TouchableHighlight
-        style={styles.button}
-        underlayColor="#a5a5a5"
-        onPress={this.props.onPress}>
-        <Text style={styles.buttonText}>{this.props.text}</Text>
-      </TouchableHighlight>
-    );
-  }
-}
 
 export default class AsyncStorageScene extends Component {
   static navigationOptions = {
@@ -42,85 +25,169 @@ export default class AsyncStorageScene extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: [],
+      name: '',
+      mobile: '',
+      savedName: '',
+      savedMobile: '',
     };
   }
 
-  //组件挂载之后回调方法
   componentDidMount() {
-    this._loadInitialState().done();
-  }
-
-  //初始化数据-默认从AsyncStorage中获取数据
-  async _loadInitialState() {
-    try {
-      var value = await AsyncStorage.getItem(STORAGE_KEY_ONE);
-      if (value != null) {
-        this._appendMessage('从存储中获取到数据为:' + value);
-      } else {
-        this._appendMessage('存储中无数据,初始化为空数据');
-      }
-    } catch (error) {
-      this._appendMessage('AsyncStorage错误' + error.message);
-    }
-  }
-
-  //进行储存数据_ONE
-  async _saveValue_One() {
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY_ONE, '我是老王');
-      this._appendMessage('保存到存储的数据为:' + '我是老王');
-    } catch (error) {
-      this._appendMessage('AsyncStorage错误' + error.message);
-    }
-  }
-
-  //进行存储数据删除_ONE
-  async _removeValue_One() {
-    try {
-      await AsyncStorage.removeItem(STORAGE_KEY_ONE);
-      this._appendMessage('数据删除成功...');
-    } catch (error) {
-      this._appendMessage('AsyncStorage错误' + error.message);
-    }
-  }
-
-  //进行把message信息添加到messages数组中
-  _appendMessage(message) {
-    this.setState({ messages: this.state.messages.concat(message) });
+    this.read();
   }
 
   render() {
     return (
       <View>
-        <Text style={styles.welcome}>
-          AsyncStorage使用实例
-        </Text>
-        <CustomButton text='点击存储数据_我是老王' onPress={this._saveValue_One} />
-        <CustomButton text='点击删除数据' onPress={this._removeValue_One} />
-        <Text style={styles.content}>信息为:</Text>
-        {this.state.messages.map((m) => <Text style={styles.content} key={m}>{m}</Text>)}
+        <View style = {styles.row}>
+          <View style = {styles.head}>
+            <Text style = {styles.text}>name</Text>
+          </View>
+          <View style = {styles.flex}>
+            <TextInput style = {styles.inputText}
+              onChangeText = {(name) => this.setState({ name })}
+              value = {this.state.name}
+            />
+          </View>
+        </View>
+
+        <View style={styles.row}>
+          <View style={styles.head}>
+            <Text style={styles.text}>mobile</Text>
+          </View>
+          <View style={styles.flex}>
+            <TextInput style={styles.inputText}
+              onChangeText={(mobile) => this.setState({ mobile })}
+              value={this.state.mobile}
+            />
+          </View>
+        </View>
+
+        <View style={styles.row}>
+
+          <TouchableOpacity
+            style = { styles.btn }
+            onPress = { () => { this.save(); } }>
+            <Text style={styles.text} >保存</Text>
+          </TouchableOpacity>
+
+          <View width = {5} />
+
+          <TouchableOpacity
+            style = { styles.btn }
+            onPress = { () => { this.clear(); } }>
+            <Text style={styles.text} >清除</Text>
+          </TouchableOpacity>
+
+        </View>
+
+        <View style={styles.row}>
+          <Text style = { styles.inputText }>name saved: { this.state.savedName }</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style = { styles.inputText }>mobile saved: { this.state.savedMobile }</Text>
+        </View>
+
       </View>
     );
   }
+
+  //save data
+  save() {
+    var _that = this;
+    var keyValuePairs = [['savedName', this.state.name], ['savedMobile', this.state.mobile]]
+    AsyncStorage.multiSet(keyValuePairs, function(errs) {
+      if(errs){
+        //todo
+      } else {
+        _that.read();
+      }
+    });
+  }
+
+  read() {
+    var _that = this;
+    var keys = ['savedName', 'savedMobile'];
+    AsyncStorage.multiGet(keys, (errors, result) => {
+      if (errors) {
+        //todo
+        return;
+      }
+
+      _that.setState( {
+        savedName: result[0][1] ? result[0][1] : '',
+        savedMobile: result[1][1] ? result[1][1] : '',
+      });
+      
+    });
+  }
+ 
+  //clear data
+  clear() {
+    var _that = this;
+    AsyncStorage.clear(function(err) {
+      if(!err){
+        _that.setState({
+          savedName: "",
+          savedMobile: ""
+        });
+      }
+    });
+  }
+
 }
 
 const styles = StyleSheet.create({
-  welcome: {
-    fontSize: 14,
-    textAlign: 'left',
-    margin: 10,
+  flex:{
+    flex: 1,
   },
-  content: {
-    fontSize: 13,
-    textAlign: 'left',
-    margin: 10,
+
+  row: {
+    flexDirection: 'row',
+    height: 45,
+    marginTop: 5,
+    marginLeft: 5,
+    marginRight: 5,
+    alignItems: 'center'
   },
-  button: {
-    margin: 5,
-    backgroundColor: 'white',
-    padding: 15,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#cdcdcd',
-  }
+
+  head:{
+    width:70,
+    backgroundColor:'#23BEFF',
+    height:45,
+    justifyContent:'center',
+    alignItems: 'center'
+  },
+
+  input:{
+    height:45,
+    borderWidth:1,
+    paddingLeft: 10,
+    borderColor: '#ccc'
+  },
+
+  text: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+
+  inputText: {
+    color: '#000',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+
+  btn: {
+    flex:1,
+    justifyContent:'center',
+    alignItems: 'center',
+    backgroundColor:'#FF7200',
+    height:45,
+    textAlign:'center',
+    lineHeight:45,
+    fontSize:15,
+  },
+  
 });
