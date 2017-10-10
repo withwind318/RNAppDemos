@@ -4,4 +4,4 @@
  * @flow
  */
 
-import './app';
+import './scene/HomeScene';

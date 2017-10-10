@@ -15,10 +15,13 @@ import {
 
 import { StackNavigator } from 'react-navigation';
 
-import AsyncStorageScene from './scene/AsyncStorageScene';
-import TouchableScene from './scene/TouchableScene';
+import AsyncStorageScene from './AsyncStorageScene';
+import TouchableScene from './TouchableScene';
+import MobxScene from './MobxScene';
+import TabScene from './TabNaviScene';
+import ListScene from './ListScene';
 
-class HomeScreen extends Component {
+class HomeScene extends Component {
   static navigationOptions = {
     title: 'HomeScreen',
   };
@@ -47,15 +50,45 @@ class HomeScreen extends Component {
           </View>
         </TouchableOpacity>
 
+        <TouchableOpacity
+          onPress={() => navigate('Mobx')}
+          activeOpacity={0.7}
+          >
+          <View style={styles.btn}>
+            <Text style={styles.text} >MobxDemo</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => navigate('Tab')}
+          activeOpacity={0.7}
+          >
+          <View style={styles.btn}>
+            <Text style={styles.text} >TabDemo</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => navigate('List')}
+          activeOpacity={0.7}
+          >
+          <View style={styles.btn}>
+            <Text style={styles.text} >ListDemo</Text>
+          </View>
+        </TouchableOpacity>
+
       </View>
     );
   }
 }
 
-export default RNAppDemos = StackNavigator({
-  Home: { screen: HomeScreen },
+export const RNAppDemos = StackNavigator({
+  Home: { screen: HomeScene },
   AsyncStorage: { screen: AsyncStorageScene },
   Touchable: { screen: TouchableScene },
+  Mobx: { screen: MobxScene },
+  Tab: { screen: TabScene },
+  List: { screen: ListScene },
 });
 
 const styles = StyleSheet.create({
