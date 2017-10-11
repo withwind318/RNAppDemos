@@ -14,34 +14,28 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { StackNavigator } from 'react-navigation';
+const TouchableScene = () => (
+  <View style={styles.flex}>
+    <TouchableHighlight
+      onPress={() => { }}
+      underlayColor="#ffff00">
+      <Text style={styles.text}>点击高亮显示效果</Text>
+    </TouchableHighlight>
 
-export default class TouchableScene extends Component {
-  static navigationOptions = {
-    title: 'TouchableScene',
-  };
-
-  render() {
-    return (
-      <View style = {styles.flex}>
-        <TouchableHighlight
-          onPress = { () => {} }
-          underlayColor="#ffff00">
-          <Text style={styles.text}>点击高亮显示效果</Text>
-        </TouchableHighlight>
-
-        <TouchableOpacity 
-          onPress={ () => {} }
-          activeOpacity = { 0.7 }
-          >
-          <View style={styles.circle}>
-            <Text style={styles.text} >圆形按钮</Text>
-          </View>
-        </TouchableOpacity>
+    <TouchableOpacity
+      onPress={() => { }}
+      activeOpacity={0.7}
+    >
+      <View style={styles.circle}>
+        <Text style={styles.text} >圆形按钮</Text>
       </View>
-    );
-  }
-}
+    </TouchableOpacity>
+  </View>
+  
+);
+    
+
+export default TouchableScene;
 
 const styles = StyleSheet.create({
   container: {

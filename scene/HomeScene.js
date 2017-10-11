@@ -11,15 +11,47 @@ import {
   Text,
   View,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 
 import { StackNavigator } from 'react-navigation';
 
+import SplashScene from './SplashScene';
 import AsyncStorageScene from './AsyncStorageScene';
 import TouchableScene from './TouchableScene';
 import MobxScene from './MobxScene';
 import TabScene from './TabNaviScene';
 import ListScene from './ListScene';
+
+const Routes = {
+  
+  AsyncStorage: {
+    name: 'AsyncStorageDemo',
+    description: 'AsyncStorageDemo',
+    screen: AsyncStorageScene 
+  },
+  Touchable: { 
+    name: 'TouchableDemo',
+    description: 'TouchableDemo',
+    screen: TouchableScene 
+  },
+  Mobx: { 
+    name: 'MobxDemo',
+    description: 'MobxDemo',
+    screen: MobxScene 
+  },
+  Tab: { 
+    name: 'TabNavigatorDemo',
+    description: 'TabNavigatorDemo',
+    screen: TabScene 
+  },
+  List: { 
+    name: 'ListViewDemo',
+    description: 'ListViewDemo',
+    screen: ListScene 
+  },
+
+};
 
 class HomeScene extends Component {
   static navigationOptions = {
@@ -30,95 +62,64 @@ class HomeScene extends Component {
     const { navigate } = this.props.navigation;
 
     return (
-      <View style={styles.container}>
+      <ScrollView>
 
-        <TouchableOpacity
-          onPress={() => navigate('AsyncStorage')}
-          activeOpacity={0.7}
-          >
-          <View style={styles.btn}>
-            <Text style={styles.text} >AsyncStorageDemo</Text>
-          </View>
-        </TouchableOpacity>
+        {Object.keys(Routes).map( (routeName) => (
+          <TouchableOpacity
+            onPress={() => {
+              const { path, params, screen } = Routes[routeName];
+              const { router } = screen;
+              const action = path && router.getActionForPathAndParams(path, params);
+              navigate(routeName, {}, action);
+            }}
+            >
+            <View style={styles.item}>
+              <Text style={styles.title}>{Routes[routeName].name}</Text>
+              <Text style={styles.description}>
+                {Routes[routeName].description}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ))}
 
-        <TouchableOpacity
-          onPress={() => navigate('Touchable')}
-          activeOpacity={0.7}
-          >
-          <View style={styles.btn}>
-            <Text style={styles.text} >TouchableDemo</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => navigate('Mobx')}
-          activeOpacity={0.7}
-          >
-          <View style={styles.btn}>
-            <Text style={styles.text} >MobxDemo</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => navigate('Tab')}
-          activeOpacity={0.7}
-          >
-          <View style={styles.btn}>
-            <Text style={styles.text} >TabDemo</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => navigate('List')}
-          activeOpacity={0.7}
-          >
-          <View style={styles.btn}>
-            <Text style={styles.text} >ListDemo</Text>
-          </View>
-        </TouchableOpacity>
-
-      </View>
+      </ScrollView>
     );
   }
 }
 
-export const RNAppDemos = StackNavigator({
-  Home: { screen: HomeScene },
-  AsyncStorage: { screen: AsyncStorageScene },
-  Touchable: { screen: TouchableScene },
-  Mobx: { screen: MobxScene },
-  Tab: { screen: TabScene },
-  List: { screen: ListScene },
-});
+
+export const RNAppDemos = StackNavigator(
+  {
+    ...Routes,
+    Home: { 
+      screen: HomeScene,
+    },
+    Splash: {
+      screen: SplashScene,
+    },
+  },
+  {
+    initialRouteName: 'Splash',
+    headerMode: 'none',
+  }
+);
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'stretch',
-    backgroundColor: '#F5FCFF',
+  item: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#ddd',
   },
-
-  row: {
-    flexDirection: 'row',
-    flex: 1,
-  },
-
-  text: {
+  title: {
     fontSize: 16,
-    marginLeft: 10,
-    color: '#434343'
+    fontWeight: 'bold',
+    color: '#444',
   },
-
-  btn: {
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 10,
-    height: 45,
-    backgroundColor: '#18B4FF',
-    justifyContent: 'center',
-    alignItems: 'center',
+  description: {
+    fontSize: 13,
+    color: '#999',
   },
 });
 

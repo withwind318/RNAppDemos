@@ -45,10 +45,14 @@ export default class ListScene extends Component {
         <View style={styles.txtBlk}>
           <Text 
             style={styles.title}
-            numberOfLines = {1}>{item.name}</Text>
+            numberOfLines = {1}>
+            {item.name}
+          </Text>
           <Text 
             numberOfLines = {1}
-            style={styles.desc}>{item.description}</Text>
+            style={styles.desc}>
+            {item.description}
+          </Text>
         </View>
 
       </View>

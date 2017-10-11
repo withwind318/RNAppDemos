@@ -10,41 +10,48 @@ import {
   StyleSheet,
   View,
   Image,
+  Dimensions,
 } from 'react-native';
 
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, NavigationActions } from 'react-navigation';
 
 import HomeScene from './HomeScene';
 import AsyncStorageScene from './AsyncStorageScene';
 import TouchableScene from './TouchableScene';
 import MobxScene from './MobxScene';
 
-class SplashScene extends Component {
+const {width, height} = Dimensions.get('window');
+
+export default class SplashScene extends Component {
   static navigationOptions = {
     title: 'SplashScene',
   };
 
   render() {
-    const { navigate } = this.props.navigation;
+    const { navigate, dispatch } = this.props.navigation;
+
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Home'})
+      ]
+    });
+
+    setTimeout(() => {
+      dispatch(resetAction);
+    }, 1500);
+    
 
     return (
       <View style={styles.container}>
-          <View style={styles.splash}>
-            <Image
-              source={require('../image/splash/splash.png')}></Image>
-          </View>
-        </View>
+        <Image style={styles.splash}
+          source={require('../image/splash/splash.png')}>
+        </Image>
+      </View>
     );
   }
-}
 
-export const RNAppDemos = StackNavigator({
-  Splash: { screen: SplashScene },
-  //Home: { screen: HomeScene },
-  AsyncStorage: { screen: AsyncStorageScene },
-  Touchable: { screen: TouchableScene },
-  Mobx: { screen: MobxScene },
-});
+}
 
 const styles = StyleSheet.create({
 
@@ -54,6 +61,8 @@ const styles = StyleSheet.create({
   },
 
   splash: {
+    width: width,
+    height: height,
     marginTop: 0,
     alignItems: 'center',
     backgroundColor: '#fff'
@@ -72,5 +81,3 @@ const styles = StyleSheet.create({
   },
   
 });
-
-AppRegistry.registerComponent('RNAppDemos', () => RNAppDemos);
