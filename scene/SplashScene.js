@@ -6,7 +6,6 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   View,
   Image,
@@ -15,10 +14,6 @@ import {
 
 import { StackNavigator, NavigationActions } from 'react-navigation';
 
-import HomeScene from './HomeScene';
-import AsyncStorageScene from './AsyncStorageScene';
-import TouchableScene from './TouchableScene';
-import MobxScene from './MobxScene';
 
 const {width, height} = Dimensions.get('window');
 
@@ -39,7 +34,7 @@ export default class SplashScene extends Component {
 
     setTimeout(() => {
       dispatch(resetAction);
-    }, 1500);
+    }, 500);
     
 
     return (

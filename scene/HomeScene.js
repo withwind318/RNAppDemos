@@ -22,6 +22,9 @@ import TouchableScene from './TouchableScene';
 import MobxScene from './MobxScene';
 import TabScene from './TabNaviScene';
 import ListScene from './ListScene';
+import DialogScene from './DialogScene';
+import ModalScene from './ModalScene';
+import AnimNavigator from './AnimationScene';
 
 const Routes = {
   
@@ -50,6 +53,16 @@ const Routes = {
     description: 'ListViewDemo',
     screen: ListScene 
   },
+  Dialog: { 
+    name: 'DialogDemo',
+    description: 'DialogDemo',
+    screen: DialogScene 
+  },
+  Animation: { 
+    name: 'AnimationDemo',
+    description: 'AnimationDemo',
+    screen: AnimNavigator 
+  },
 
 };
 
@@ -66,6 +79,7 @@ class HomeScene extends Component {
 
         {Object.keys(Routes).map( (routeName) => (
           <TouchableOpacity
+            key = {routeName}
             onPress={() => {
               const { path, params, screen } = Routes[routeName];
               const { router } = screen;
@@ -88,7 +102,7 @@ class HomeScene extends Component {
 }
 
 
-export const RNAppDemos = StackNavigator(
+const RNAppDemos = StackNavigator(
   {
     ...Routes,
     Home: { 

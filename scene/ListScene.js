@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     paddingTop: 10,
-    fontSize: 18,
     height: 65,
   },
 
